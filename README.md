@@ -36,7 +36,7 @@ Structure of backed up files
             ├── team2.json
             └── team3.json
 
-Directories `public-repos/repo1-id-2014-04-30.tar.bz2/repo1` and `public-repos/repo1-id-2014-04-30.tar.bz2/repo1.wiki` are simply the sourse of Git repositories (see clone --mirror for more information)
+Directories `public-repos/repo1-id-2014-04-30.tar.bz2/repo1` and `public-repos/repo1-id-2014-04-30.tar.bz2/repo1.wiki` are simply the source of Git repositories (see clone --mirror for more information)
 
 Usage
 -----
