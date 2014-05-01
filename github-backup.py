@@ -152,7 +152,7 @@ def dump_repo(org, username, password, type, destdir):
             if repo.has_wiki:
                 try:
                     git.Repo.clone_from(
-                        WIKI_URL % repo_data, join(temp, repo.name), mirror=True)
+                        WIKI_URL % repo_data, join(temp, "%s.wiki" % repo.name), mirror=True)
                 except git.exc.GitCommandError:
                     pass # the wiki is enabled but empty!"
     
