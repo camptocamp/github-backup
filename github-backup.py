@@ -121,6 +121,8 @@ def dump_repo_pulls(repo, destdir):
 
 def dump_repo(org, username, password, type, destdir):
 
+    count = 0
+
     for repo in org.iter_repos(type=type):
         
         try:
@@ -168,12 +170,15 @@ def dump_repo(org, username, password, type, destdir):
             tar.close()
             shutil.rmtree(temp)
             syslog.syslog("repo %s is backed up in %s" % ( repo.name, archname ))
+	    count += 1
 
         except:
             syslog.syslog("Unexpected error: %s" % sys.exc_info()[0])
             syslog.syslog("sleep 5 seconds and try again ...")
             time.sleep(5)
-    
+
+    return count    
+
 if __name__ == "__main__":
 
     parser = optparse.OptionParser()
@@ -201,8 +206,8 @@ if __name__ == "__main__":
     dump_members(gh,org,destdir)
     dump_teams(org,destdir)
 
-    for repo_type in ['public', 'private']:
-        dump_repo(org, username, password, repo_type, destdir)
+    public_count  = dump_repo(org, username, password, 'public', destdir)
+    private_count = dump_repo(org, username, password, 'private', destdir)
     
-    syslog.syslog("backup session is now completed")
+    syslog.syslog("session is now completed, %s public and %s private repositories backed up % (public_count, private_count"))
     syslog.closelog()
