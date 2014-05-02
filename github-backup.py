@@ -209,5 +209,5 @@ if __name__ == "__main__":
     public_count  = dump_repo(org, username, password, 'public', destdir)
     private_count = dump_repo(org, username, password, 'private', destdir)
     
-    syslog.syslog("session is now completed, %s public and %s private repositories backed up % (public_count, private_count"))
+    syslog.syslog("session is now completed, %s public and %s private repositories backed up % (public_count, private_count)")
     syslog.closelog()
