@@ -15,7 +15,7 @@ yesterday = (now-datetime.timedelta(days=1)).strftime("%b-%d")
 results = []
 
 for logfile in logfiles:
-  for line in open(logfile):
+  for line in reversed(open(logfile).readlines()):
      result = re.match(REGEX, line)
      if result: results.append(result)
 
