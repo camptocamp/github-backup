@@ -49,6 +49,7 @@ Create a simple configuration file (e.g. github-backup.conf) with the following 
     password: XXX
     organization: camptocamp
     destdir: /your/backup/folder
+    retention: X # how many archives to keep, an integer
 
 And run the script like this:
 
