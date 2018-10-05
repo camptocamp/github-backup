@@ -11,7 +11,7 @@ import shutil
 import syslog
 import tarfile
 import optparse
-import ConfigParser
+from configparser import ConfigParser
 from github3 import login
 from tempfile import mkdtemp
 from os.path import join, exists
@@ -24,7 +24,7 @@ def remove_older_than(pattern, x):
     files = glob.glob(pattern)
     files.sort(key=lambda f: os.path.getmtime(f))
     for file in files[:-x]:
-	os.remove(file)
+        os.remove(file)
         syslog.syslog("remove %s" % file)
 
 def json_dump(fd, values):
@@ -43,9 +43,9 @@ def dump_members(gh, org, destdir, retention, dirname='members'):
         os.mkdir(ddir)
 
     temp = mkdtemp(dir=destdir)
-    for member in org.iter_members():
+    for member in org.members():
         fd = open(join(temp, "%s.json" % member.login), 'w')
-        json_dump(fd, gh.user(member.login).to_json())
+        json_dump(fd, gh.user(member.login).as_json())
         fd.close()
 
     tar = tarfile.open(archname, "w:bz2")
@@ -69,11 +69,11 @@ def dump_teams(org, destdir, retention, dirname='teams'):
 
     temp = mkdtemp(dir=destdir)
 
-    for team in org.iter_teams():
+    for team in org.teams():
         fd = open(join(temp, "%s.json" % team.name), 'w')
         members = []
-        for member in team.iter_members():
-            members.append(member.to_json())
+        for member in team.members():
+            members.append(member.as_json())
 
         json_dump(fd, members)
         fd.close()
@@ -87,13 +87,13 @@ def dump_teams(org, destdir, retention, dirname='teams'):
 
 def dump_repo_details(repo, destdir):
     fd = open(join(destdir, "%s.json" % repo.name), 'w')
-    json_dump(fd, repo.to_json())
+    json_dump(fd, repo.as_json())
     fd.close()
 
 def dump_collaborators(repo, destdir):
     fd = open(join(destdir, "%s-collaborators.json" % repo.name), 'w')
     members = []
-    for team in repo.iter_teams():
+    for team in repo.teams():
         members.append(team.to_json())
 
     json_dump(fd, members)
@@ -104,10 +104,10 @@ def dump_repo_issues(repo, destdir):
     fdc = open(join(destdir, "%s-issues-comments.json" % repo.name), 'w')
     issues  = []
     comments = []
-    for issue in repo.iter_issues():
-        issues.append(issue.to_json())
+    for issue in repo.issues():
+        issues.append(issue.as_json())
         for comment in issue.iter_comments():
-            comments.append(comment.to_json())
+            comments.append(comment.as_json())
 
     json_dump(fd, issues)
     json_dump(fdc, comments)
@@ -119,10 +119,10 @@ def dump_repo_pulls(repo, destdir):
     fdc = open(join(destdir, "%s-pulls-comments.json" % repo.name), 'w')
     pulls  = []
     comments = []
-    for pull in repo.iter_pulls():
-        pulls.append(pull.to_json())
-        for comment in pull.iter_comments():
-            comments.append(comment.to_json())
+    for pull in repo.pull_requests():
+        pulls.append(pull.as_json())
+        for comment in pull.comments():
+            comments.append(comment.as_json())
 
     json_dump(fd, pulls)
     json_dump(fdc, comments)
@@ -133,9 +133,9 @@ def dump_repo(org, username, password, type, destdir, retention):
 
     count = 0
 
-    for repo in org.iter_repos(type=type):
+    for repo in org.repositories(type=type):
 
-	while True:
+        while True:
             try:
                 repodir = "%s-repos" % type
                 ddir = join(destdir, repodir)
@@ -202,7 +202,7 @@ if __name__ == "__main__":
     if options.config is None:
         parser.error('configuration file not given')
 
-    config = ConfigParser.ConfigParser()
+    config = ConfigParser()
     config.read(options.config)
 
     username = config.get('github-backup', 'username')
