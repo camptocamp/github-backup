@@ -1,0 +1,17 @@
+asn1crypto==0.24.0
+certifi==2018.8.24
+cffi==1.11.5
+chardet==3.0.4
+cryptography==2.3.1
+gitdb2==2.0.4
+github3.py==1.2.0
+GitPython==2.1.11
+idna==2.7
+jwcrypto==0.5.0
+pycparser==2.19
+python-dateutil==2.7.3
+requests==2.19.1
+six==1.11.0
+smmap2==2.0.4
+uritemplate==3.0.0
+urllib3==1.23
