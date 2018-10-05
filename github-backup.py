@@ -205,8 +205,9 @@ if __name__ == "__main__":
     config = ConfigParser()
     config.read(options.config)
 
-    username = config.get('github-backup', 'username')
-    password = config.get('github-backup', 'password')
+    token = config.get('github-backup', 'token', fallback=None)
+    username = config.get('github-backup', 'username', fallback=None)
+    password = config.get('github-backup', 'password', fallback=None)
     organization = config.get('github-backup', 'organization')
     destdir = config.get('github-backup', 'destdir')
     retention = int(config.get('github-backup', 'retention'))
@@ -214,7 +215,11 @@ if __name__ == "__main__":
     syslog.openlog('github-backup')
     syslog.syslog("starting a new session of backup")
 
-    gh = login(username, password)
+    if token:
+        gh = login(token=token)
+    else:
+        gh = login(username, password)
+
     org = gh.organization(organization)
 
     dump_members(gh, org, destdir, retention)

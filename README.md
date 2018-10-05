@@ -45,11 +45,13 @@ Create a simple configuration file (e.g. github-backup.conf) with the following 
 
     [github-backup]
 
-    username: XXX
-    password: XXX
+    token: XXX
     organization: camptocamp
     destdir: /your/backup/folder
     retention: X # how many archives to keep, an integer
+
+Where `token` is a GitHub personal access token with the "repo" and "read:org" scopes.
+It is also possible to provide `username` and `password` instead of `token`.
 
 And run the script like this:
 
