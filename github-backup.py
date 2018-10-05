@@ -45,7 +45,7 @@ def dump_members(gh, org, destdir, retention, dirname='members'):
     temp = mkdtemp(dir=destdir)
     for member in org.members():
         fd = open(join(temp, "%s.json" % member.login), 'w')
-        json_dump(fd, gh.user(member.login).as_json())
+        json_dump(fd, gh.user(member.login).as_dict())
         fd.close()
 
     tar = tarfile.open(archname, "w:bz2")
@@ -73,7 +73,7 @@ def dump_teams(org, destdir, retention, dirname='teams'):
         fd = open(join(temp, "%s.json" % team.name), 'w')
         members = []
         for member in team.members():
-            members.append(member.as_json())
+            members.append(member.as_dict())
 
         json_dump(fd, members)
         fd.close()
@@ -87,7 +87,7 @@ def dump_teams(org, destdir, retention, dirname='teams'):
 
 def dump_repo_details(repo, destdir):
     fd = open(join(destdir, "%s.json" % repo.name), 'w')
-    json_dump(fd, repo.as_json())
+    json_dump(fd, repo.as_dict())
     fd.close()
 
 def dump_collaborators(repo, destdir):
@@ -105,9 +105,9 @@ def dump_repo_issues(repo, destdir):
     issues  = []
     comments = []
     for issue in repo.issues():
-        issues.append(issue.as_json())
+        issues.append(issue.as_dict())
         for comment in issue.iter_comments():
-            comments.append(comment.as_json())
+            comments.append(comment.as_dict())
 
     json_dump(fd, issues)
     json_dump(fdc, comments)
@@ -120,9 +120,9 @@ def dump_repo_pulls(repo, destdir):
     pulls  = []
     comments = []
     for pull in repo.pull_requests():
-        pulls.append(pull.as_json())
+        pulls.append(pull.as_dict())
         for comment in pull.comments():
-            comments.append(comment.as_json())
+            comments.append(comment.as_dict())
 
     json_dump(fd, pulls)
     json_dump(fdc, comments)
